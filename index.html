@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ôn tập Tiếng Anh YHCT - Năm 1</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0d6efd;
+            --primary-dark: #0a58ca;
+            --success: #198754;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --bg: #eef2f6;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg);
+            color: var(--dark);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+        }
+
+        @media (min-width: 800px) {
+            .container {
+                margin: 20px auto;
+                border-radius: 12px;
+                min-height: 90vh;
+                overflow: hidden; /* Bo góc */
+            }
+        }
+
+        /* --- Header --- */
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+        }
+        header h1 { margin: 0; font-size: 1.4rem; }
+
+        /* --- Sticky Wrapper (Fix lỗi giao diện mobile) --- */
+        .sticky-wrapper {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* --- Tabs Navigation --- */
+        .tabs {
+            display: flex;
+            background: #fff;
+            padding: 0 10px;
+            border-bottom: 1px solid #dee2e6;
+            overflow-x: auto;
+            /* Ẩn thanh cuộn nhưng vẫn cuộn được */
+            scrollbar-width: none; 
+            -ms-overflow-style: none;
+        }
+        .tabs::-webkit-scrollbar { display: none; }
+
+        .tab-btn {
+            padding: 12px 15px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--gray);
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+            transition: all 0.2s;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.95rem;
+        }
+        .tab-btn small {
+            font-size: 0.7rem;
+            margin-top: 2px;
+            opacity: 0.8;
+        }
+        .tab-btn:hover { color: var(--primary); background-color: #f8f9fa; }
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            font-weight: bold;
+            background-color: #f0f7ff;
+        }
+        
+        /* --- Stats Bar --- */
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 20px;
+            background: #eef2f6;
+            border-bottom: 1px solid #dce2e8;
+            font-size: 0.9rem;
+            color: var(--dark);
+        }
+
+        /* --- Quiz Body --- */
+        .quiz-body {
+            padding: 20px;
+            flex: 1;
+            background-color: #f8f9fa;
+        }
+
+        /* --- Reading Passage Box --- */
+        .reading-passage {
+            background: #fff;
+            border: 1px solid #cfe2ff;
+            border-left: 5px solid var(--primary);
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            line-height: 1.8;
+            background-color: #f0f7ff;
+        }
+        .reading-passage h3 { margin-top: 0; color: var(--primary-dark); font-size: 1.2rem; }
+        .reading-passage p { margin-bottom: 10px; text-align: justify; }
+
+        /* --- Question Card --- */
+        .question-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid #e9ecef;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        .section-badge {
+            display: inline-block;
+            background: #e7f1ff;
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            font-weight: 500;
+            color: #212529;
+        }
+
+        .context-box {
+            background: #fff3cd;
+            border-left: 4px solid var(--warning);
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap; /* Giữ xuống dòng */
+            font-size: 1rem;
+            color: #444;
+        }
+
+        .img-display {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .img-display img {
+            max-width: 100%;
+            max-height: 250px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        /* --- Options Grid --- */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+        @media (min-width: 600px) {
+            .options-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        .option-btn {
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 1rem;
+            transition: all 0.2s;
+            position: relative;
+            user-select: none;
+        }
+
+        .option-btn:hover:not(.disabled) {
+            border-color: var(--primary);
+            background: #f8fbff;
+        }
+
+        .option-btn.selected {
+            border-color: var(--primary);
+            background: #e7f1ff;
+            font-weight: bold;
+        }
+
+        .option-btn.correct {
+            border-color: var(--success);
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .option-btn.wrong {
+            border-color: var(--danger);
+            background: #f8d7da;
+            color: #842029;
+            opacity: 0.8;
+        }
+
+        .option-btn.disabled {
+            pointer-events: none;
+        }
+
+        /* --- Essay Input --- */
+        .essay-area { margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap; }
+        .essay-input {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px;
+            border: 2px solid #ced4da;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+        .essay-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+        }
+
+        /* --- Feedback --- */
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            display: none;
+            font-size: 0.95rem;
+        }
+        .feedback.show { display: block; animation: slideDown 0.3s ease-out; }
+        .feedback h4 { margin-top: 0; margin-bottom: 8px; font-size: 1rem; }
+        .feedback p { margin: 5px 0; }
+
+        /* --- Footer Nav --- */
+        footer {
+            padding: 20px;
+            background: #fff;
+            border-top: 1px solid #eee;
+            text-align: center;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); }
+        .btn-outline { background: transparent; border: 1px solid var(--gray); color: var(--gray); }
+        .btn-outline:hover { background: #f8f9fa; color: var(--dark); border-color: var(--dark); }
+        .btn-check { background: var(--success); color: white; width: 100%; max-width: 300px; }
+        .btn-check:hover { background: #157347; }
+        
+        .floating-score {
+            font-weight: bold;
+            color: var(--success);
+            background: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid #c3e6cb;
+        }
+
+        /* --- Result Screen --- */
+        .result-screen {
+            text-align: center;
+            padding: 40px 20px;
+            display: none;
+        }
+        .score-circle {
+            width: 140px; height: 140px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 0 auto 20px;
+            box-shadow: 0 10px 20px rgba(13, 110, 253, 0.3);
+        }
+
+        .tts-icon { 
+            cursor: pointer; 
+            margin-left: 8px; 
+            color: var(--primary); 
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+        .tts-icon:active { transform: scale(0.9); }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Ôn tập Tiếng Anh YHCT</h1>
+    </header>
+
+    <!-- STICKY WRAPPER: Tabs & Stats move together -->
+    <div class="sticky-wrapper">
+        <!-- TABS -->
+        <div class="tabs">
+            <button class="tab-btn active" id="tab-pronunciation" onclick="switchTab('pronunciation')">
+                Pronunciation
+                <small id="prog-pronunciation">(0/0)</small>
+            </button>
+            <button class="tab-btn" id="tab-vocab" onclick="switchTab('vocab')">
+                Vocab & Grammar
+                <small id="prog-vocab">(0/0)</small>
+            </button>
+            <button class="tab-btn" id="tab-reading" onclick="switchTab('reading')">
+                Reading
+                <small id="prog-reading">(0/0)</small>
+            </button>
+            <button class="tab-btn" id="tab-writing" onclick="switchTab('writing')">
+                Writing
+                <small id="prog-writing">(0/0)</small>
+            </button>
+        </div>
+
+        <!-- STATS -->
+        <div class="stats-bar">
+            <span>Đang làm: <strong id="current-tab-name">Pronunciation</strong></span>
+            <span class="floating-score">Đúng: <span id="score">0</span>/<span id="total-q">0</span></span>
+        </div>
+    </div>
+
+    <!-- App View -->
+    <div id="quiz-view">
+        <div class="quiz-body" id="question-list">
+            <!-- Questions rendered here as a list -->
+        </div>
+
+        <footer>
+            <button class="btn btn-check" id="btn-finish" onclick="finishQuiz()">Hoàn thành & Xem kết quả</button>
+        </footer>
+    </div>
+
+    <!-- Result View -->
+    <div id="result-view" class="result-screen">
+        <div class="score-circle" id="final-score">0/0</div>
+        <h2>Bạn đã hoàn thành phần thi này!</h2>
+        <p id="feedback-msg" style="font-size: 1.1rem; margin-bottom: 30px;"></p>
+        
+        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+            <button class="btn btn-outline" onclick="reviewMode()">🔍 Xem lại bài làm</button>
+            <button class="btn btn-primary" onclick="restartTab()">🔄 Làm lại phần này</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- DATABASE OF PASSAGES ---
+    const passageContent = {
+        "reading_A": `
+            <h3>Passage A: Unique Foods in Asia</h3>
+            <p>Many people consider Asia as a food heaven with attractive and delicious dishes. However, there is also some really strange food that not everyone is brave enough to try.</p>
+            <p><strong>Silkworm pupae (con nhộng) in Vietnam</strong><br>
+            Many villages in the north of Vietnam are famous for raising silkworms (con tằm) and harvest cocoons to make silk. Therefore, silkworm pupae are very popular in the local markets. First, people wash the pupae, dry and mix them with salt. Then, they fry pupae with oil and fish sauce. They also cut lemon leaves into tiny strips and mix them with fried pupae to add more taste to the dish. The pupae's outer shell is crunchy while the inside is soft and juicy. It also contains lots of protein.</p>
+            <p><strong>Stinky tofu in China</strong><br>
+            Stinky tofu is a kind of fermented tofu. It has a strong unpleasant smell. Some people say it smells like garbage or wet socks. It's a popular street food in China, Taiwan or Hongkong. People usually buy it at night markets or roadside stalls, rather than in restaurants. Traditionally, it is made from fermented milk, vegetables, meat and Chinese herbs. People can cook stinky tofu in different ways. The most common way is to deep-fry it and then add garlic, soy sauce and chili sauce. It's crispy on the outside, but still hot and smooth on the inside. People serve it with cucumber and pickled cabbage.</p>
+        `,
+        "reading_B": `
+            <h3>Passage B: Girl Scouts of the USA</h3>
+            <p>Girl Scouts of the USA is the largest organization for girls in the world. Juliette "Daisy" Gordon Low organized the first group of Girl Scouts on March 12th, 1912. She wanted to give girls the opportunity to get out of the house and help their community. Girl Scouts of the USA started with 18 members. Today, there are about 2.5 million girl and adult members worldwide.</p>
+            <p>The girls work on a variety of projects. Simple projects may involve sewing, or collecting toys for kids who live in shelters. Other community services for older girls includes volunteering at a soup kitchen, planting trees, doing car washes or cleaning up litter in their community.</p>
+            <p>Girl Scouts is famous for raising money by selling delicious Girl Scout cookies. The girls bake cookies at home with their mums volunteering as an advisor. The organization believes that selling cookies helps Girl Scouts practice life skills like teamwork and money management. When they complete goals, they earn badges for their work which they wear on their sashes.</p>
+        `,
+        "reading_C": `
+            <h3>Passage C: Air Travel Tips</h3>
+            <p>Last summer, I was planning on taking an airplane for the first time, but there were many things I didn't know. For example, how many suitcases should I take or what can I bring in my backpack? So, I asked my mom for help, and she told me that the more luggage you bring, the more expensive the ticket is. So, she suggested bringing only the things I needed.</p>
+            <p>She also told me not to take dangerous items like large batteries or sharp objects because I'll have to go through customs. My mom also said not to lose my boarding pass or passport because I'd need them to get on the plane. Finally, she told me I needed to find the baggage claim after the airplane landed to pick up my suitcases. I'm happy my mom was able to help me know more about air traveling because it made the experience better.</p>
+        `,
+        "reading_D": `
+            <h3>Passage D: Finding Balance Through Sports</h3>
+            <p>Emma used to spend most of her free time watching movies or scrolling through social media. Last year, her doctor told her she needed to exercise more because she often felt tired and had back pain. At first, Emma didn't enjoy sports she thought they were too competitive and exhausting. But one day, a friend invited her to try swimming, and that completely changed her opinion.</p>
+            <p>Now Emma goes swimming three times a week at the local sports center. She says it helps her relax after work and improves her concentration. On weekends, she sometimes joins a group that goes hiking in the nearby hills. She enjoys being outdoors and meeting new people who share the same interests.</p>
+            <p>Emma believes that doing sports isn't just about keeping fit. It's also a great way to release stress and build confidence. She still loves watching movies, but now she feels happier because she knows how to balance rest and activity in her free time.</p>
+        `,
+        "reading_E": `
+            <h3>Passage E: Mother's Day and Father's Day</h3>
+            <p>In the United States, people celebrate Mother's day and Father's Day. Mother's Day is celebrated on the second Sunday in May. On this occasion, mother usually receives greeting cards and gifts from her husband and children. The best gift of all for an American Mom is a day of leisure. The majority of American mothers have outside jobs as well as housework, so their working days are often very hard. The working mother enjoys the traditional Mother's day custom of breakfast cooked by her family and served to her on a tray in bed. Later in that day, it's also traditional for the extended family group to get together for dinner, either in a restaurant or in one of their homes. Flowers are an important part of Mother's Day. Mothers are often given a plant for the occasion, particularly if they are elderly.</p>
+            <p>Father's Day is celebrated throughout the United States and Canada on the third Sunday in June. The holiday customs are similar to Mother's Day. Dad also receives greeting cards and gifts from his family and enjoys a day of leisure.</p>
+        `
+    };
+
+    // --- QUESTION DATABASE ---
+    // (Giữ nguyên data của bạn, đây là phần code logic)
+    const rawData = [
+         // --- PART I: PRONUNCIATION A (s/es) ---
+        { section: "I. PRONUNCIATION - A", type: "mcq", question: "Choose the word whose underlined part is pronounced differently.", text: "A. proofs B. books C. points D. days", options: ["proofs", "books", "points", "days"], answer: 3, explain: "'days' phát âm đuôi /z/, các từ còn lại là /s/." },
+        { section: "I. PRONUNCIATION - A", type: "mcq", question: "Choose the word whose underlined part is pronounced differently.", text: "A. helps B. laughs C. cooks D. finds", options: ["helps", "laughs", "cooks", "finds"], answer: 3, explain: "'finds' phát âm /z/, còn lại /s/." },
+        { section: "I. PRONUNCIATION - A", type: "mcq", question: "Choose the word whose underlined part is pronounced differently.", text: "A. neighbors B. friends C. relatives D. photographs", options: ["neighbors", "friends", "relatives", "photographs"], answer: 3, explain: "'photographs' phát âm /s/, còn lại /z/." },
+        { section: "I. PRONUNCIATION - A", type: "mcq", question: "Choose the word whose underlined part is pronounced differently.", text: "A. snacks B. follows C. titles D. writers", options: ["snacks", "follows", "titles", "writers"], answer: 0, explain: "'snacks' phát âm /s/, còn lại /z/." },
+        { section: "I. PRONUNCIATION - A", type: "mcq", question: "Choose the word whose underlined part is pronounced differently.", text: "A. streets B. phones C. books D. makes", options: ["streets", "phones", "books", "makes"], answer: 1, explain: "'phones' phát âm /z/, còn lại /s/." },
+        { section: "I. PRONUNCIATION - A", type: "mcq", question: "Choose the word whose underlined part is pronounced differently.", text: "A. cities B. satellites C. series D. workers", options: ["cities", "satellites", "series", "workers"], answer: 1, explain: "'satellites' (/s/), các từ khác đuôi thường là /z/ hoặc ngữ cảnh cụ thể." },
+        { section: "I. PRONUNCIATION - A", type: "mcq", question: "Choose the word whose underlined part is pronounced differently.", text: "A. develops B. takes C. laughs D. volumes", options: ["develops", "takes", "laughs", "volumes"], answer: 3, explain: "'volumes' (/z/), còn lại /s/." },
+        { section: "I. PRONUNCIATION - A", type: "mcq", question: "Choose the word whose underlined part is pronounced differently.", text: "A. phones B. streets C. books D. makes", options: ["phones", "streets", "books", "makes"], answer: 0, explain: "'phones' (/z/), còn lại /s/." },
+        { section: "I. PRONUNCIATION - A", type: "mcq", question: "Choose the word whose underlined part is pronounced differently.", text: "A. proofs B. regions C. lifts D. rocks", options: ["proofs", "regions", "lifts", "rocks"], answer: 1, explain: "'regions' (/z/), còn lại /s/." },
+        { section: "I. PRONUNCIATION - A", type: "mcq", question: "Choose the word whose underlined part is pronounced differently.", text: "A. involves B. believes C. suggests D. steals", options: ["involves", "believes", "suggests", "steals"], answer: 2, explain: "'suggests' (/s/), còn lại /z/." },
+        { section: "I. PRONUNCIATION - A", type: "mcq", question: "Choose the word whose underlined part is pronounced differently.", text: "A. remembers B. cooks C. walls D. pyramids", options: ["remembers", "cooks", "walls", "pyramids"], answer: 1, explain: "'cooks' (/s/), còn lại /z/." },
+        { section: "I. PRONUNCIATION - A", type: "mcq", question: "Choose the word whose underlined part is pronounced differently.", text: "A. miles B. words C. accidents D. names", options: ["miles", "words", "accidents", "names"], answer: 2, explain: "'accidents' (/s/), còn lại /z/." },
+        { section: "I. PRONUNCIATION - A", type: "mcq", question: "Choose the word whose underlined part is pronounced differently.", text: "A. sports B. plays C. chores D. minds", options: ["sports", "plays", "chores", "minds"], answer: 0, explain: "'sports' (/s/), còn lại /z/." },
+        { section: "I. PRONUNCIATION - A", type: "mcq", question: "Choose the word whose underlined part is pronounced differently.", text: "A. nations B. speakers C. languages D. minds", options: ["nations", "speakers", "languages", "minds"], answer: 2, explain: "'languages' (/iz/), còn lại /z/." },
+        { section: "I. PRONUNCIATION - A", type: "mcq", question: "Choose the word whose underlined part is pronounced differently.", text: "A. proofs B. looks C. lends D. stops", options: ["proofs", "looks", "lends", "stops"], answer: 2, explain: "'lends' (/z/), còn lại /s/." },
+
+        // --- PART I: PRONUNCIATION B (-ed) ---
+        { section: "I. PRONUNCIATION - B", type: "mcq", question: "Choose the word whose underlined part is pronounced differently.", text: "A. coughed B. phoned C. booked D. stopped", options: ["coughed", "phoned", "booked", "stopped"], answer: 1, explain: "'phoned' (/d/), còn lại /t/." },
+        { section: "I. PRONUNCIATION - B", type: "mcq", question: "Choose the word whose underlined part is pronounced differently.", text: "A. talked B. looked C. naked D. worked", options: ["talked", "looked", "naked", "worked"], answer: 2, explain: "'naked' (/id/ - tính từ), còn lại /t/." },
+        { section: "I. PRONUNCIATION - B", type: "mcq", question: "Choose the word whose underlined part is pronounced differently.", text: "A. developed B. ignored C. laughed D. washed", options: ["developed", "ignored", "laughed", "washed"], answer: 1, explain: "'ignored' (/d/), còn lại /t/." },
+        { section: "I. PRONUNCIATION - B", type: "mcq", question: "Choose the word whose underlined part is pronounced differently.", text: "A. phoned B. stated C. mended D. old-aged", options: ["phoned", "stated", "mended", "old-aged"], answer: 0, explain: "'phoned' (/d/), 'stated' và 'mended' là /id/." },
+        { section: "I. PRONUNCIATION - B", type: "mcq", question: "Choose the word whose underlined part is pronounced differently.", text: "A. clapped B. attracted C. lifted D. needed", options: ["clapped", "attracted", "lifted", "needed"], answer: 0, explain: "'clapped' (/t/), còn lại /id/." },
+        { section: "I. PRONUNCIATION - B", type: "mcq", question: "Choose the word whose underlined part is pronounced differently.", text: "A. involved B. believed C. praised D. locked", options: ["involved", "believed", "praised", "locked"], answer: 3, explain: "'locked' (/t/), còn lại /d/." },
+        { section: "I. PRONUNCIATION - B", type: "mcq", question: "Choose the word whose underlined part is pronounced differently.", text: "A. remembered B. cooked C. closed D. cleaned", options: ["remembered", "cooked", "closed", "cleaned"], answer: 1, explain: "'cooked' (/t/), còn lại /d/." },
+        { section: "I. PRONUNCIATION - B", type: "mcq", question: "Choose the word whose underlined part is pronounced differently.", text: "A. smiled B. regarded C. suggested D. naked", options: ["smiled", "regarded", "suggested", "naked"], answer: 0, explain: "'smiled' (/d/), còn lại /id/." },
+        { section: "I. PRONUNCIATION - B", type: "mcq", question: "Choose the word whose underlined part is pronounced differently.", text: "A. reversed B. choked C. played D. sentenced", options: ["reversed", "choked", "played", "sentenced"], answer: 2, explain: "'played' (/d/), còn lại /t/." },
+        { section: "I. PRONUNCIATION - B", type: "mcq", question: "Choose the word whose underlined part is pronounced differently.", text: "A. minded B. hated C. exchanged D. old-aged", options: ["minded", "hated", "exchanged", "old-aged"], answer: 2, explain: "'exchanged' (/d/), còn lại /id/." },
+        { section: "I. PRONUNCIATION - B", type: "mcq", question: "Choose the word whose underlined part is pronounced differently.", text: "A. proved B. looked C. stopped D. coughed", options: ["proved", "looked", "stopped", "coughed"], answer: 0, explain: "'proved' (/d/), còn lại /t/." },
+        { section: "I. PRONUNCIATION - B", type: "mcq", question: "Choose the word whose underlined part is pronounced differently.", text: "A. dated B. changed C. struggled D. agreed", options: ["dated", "changed", "struggled", "agreed"], answer: 0, explain: "'dated' (/id/), còn lại /d/." },
+        { section: "I. PRONUNCIATION - B", type: "mcq", question: "Choose the word whose underlined part is pronounced differently.", text: "A. scaled B. stared C. phoned D. hundred", options: ["scaled", "stared", "phoned", "hundred"], answer: 3, explain: "'hundred' (/rid/), các từ kia đuôi ed là /d/." },
+        { section: "I. PRONUNCIATION - B", type: "mcq", question: "Choose the word whose underlined part is pronounced differently.", text: "A. behaved B. washed C. clicked D. approached", options: ["behaved", "washed", "clicked", "approached"], answer: 0, explain: "'behaved' (/d/), còn lại /t/." },
+        { section: "I. PRONUNCIATION - B", type: "mcq", question: "Choose the word whose underlined part is pronounced differently.", text: "A. worked B. shopped C. missed D. displayed", options: ["worked", "shopped", "missed", "displayed"], answer: 3, explain: "'displayed' (/d/), còn lại /t/." },
+
+        // --- PART I: PRONUNCIATION C ---
+        { section: "I. PRONUNCIATION - C", type: "mcq", question: "Choose the word differently pronounced.", text: "A. miles B. pens C. drifts D. glows", options: ["miles", "pens", "drifts", "glows"], answer: 2, explain: "'drifts' (/s/), còn lại /z/." },
+        { section: "I. PRONUNCIATION - C", type: "mcq", question: "Choose the word differently pronounced.", text: "A. likes B. attends C. reads D. loves", options: ["likes", "attends", "reads", "loves"], answer: 0, explain: "'likes' (/s/), còn lại /z/." },
+        { section: "I. PRONUNCIATION - C", type: "mcq", question: "Choose the word differently pronounced.", text: "A. signs B. coughs C. becomes D. survives", options: ["signs", "coughs", "becomes", "survives"], answer: 1, explain: "'coughs' (/s/), còn lại /z/." },
+        { section: "I. PRONUNCIATION - C", type: "mcq", question: "Choose the word differently pronounced.", text: "A. opened B. knocked C. played D. occurred", options: ["opened", "knocked", "played", "occurred"], answer: 1, explain: "'knocked' (/t/), còn lại /d/." },
+        { section: "I. PRONUNCIATION - C", type: "mcq", question: "Choose the word differently pronounced.", text: "A. needed B. booked C. stopped D. washed", options: ["needed", "booked", "stopped", "washed"], answer: 0, explain: "'needed' (/id/), còn lại /t/." },
+        { section: "I. PRONUNCIATION - C", type: "mcq", question: "Choose the word differently pronounced.", text: "A. watched B. phoned C. referred D. followed", options: ["watched", "phoned", "referred", "followed"], answer: 0, explain: "'watched' (/t/), còn lại /d/." },
+        { section: "I. PRONUNCIATION - C", type: "mcq", question: "Choose the word differently pronounced.", text: "A. movie B. hotel C. photo D. social", options: ["movie", "hotel", "photo", "social"], answer: 0, explain: "'movie' (/u:/), còn lại /ou/." },
+        { section: "I. PRONUNCIATION - C", type: "mcq", question: "Choose the word differently pronounced.", text: "A. centre B. restaurant C. prefer D. forget", options: ["centre", "restaurant", "prefer", "forget"], answer: 2, explain: "'prefer' trọng âm 2 hoặc âm /i:/." },
+        { section: "I. PRONUNCIATION - C", type: "mcq", question: "Choose the word differently pronounced.", text: "A. motorbike B. little C. exciting D. kind", options: ["motorbike", "little", "exciting", "kind"], answer: 1, explain: "'little' (/i/), còn lại /ai/." },
+        { section: "I. PRONUNCIATION - C", type: "mcq", question: "Choose the word differently pronounced.", text: "A. blood B. pool C. food D. tool", options: ["blood", "pool", "food", "tool"], answer: 0, explain: "'blood' (/ʌ/), còn lại /u:/." },
+
+        // --- PART II: VOCAB & GRAMMAR A ---
+        { section: "II. VOCABULARY - A", type: "mcq", question: "Choose the best option.", text: "My brother ______ sports. He watches TV or plays computer games all day.", options: ["A. often plays", "B. never plays", "C. rarely play", "D. is sometimes playing"], answer: 1, explain: "Không chơi thể thao (ngồi xem TV cả ngày) -> never plays." },
+        { section: "II. VOCABULARY - A", type: "mcq", question: "Choose the best option.", text: "My friends and I go skating at the ______ on Saturdays.", options: ["A. water park", "B. fair", "C. alley", "D. ice rink"], answer: 3, explain: "Trượt băng (skating) -> ice rink (sân băng)." },
+        { section: "II. VOCABULARY - A", type: "mcq", question: "Choose the best option.", text: "My sister ______ with her friends on school nights. She ______ lots of homework.", options: ["A. doesn't hang out/has", "B. hangs out/ has", "C. isn't hanging out/ is having", "D. isn't hanging out/ has"], answer: 0, explain: "Hiện tại đơn cho thói quen. Doesn't hang out / has." },
+        { section: "II. VOCABULARY - A", type: "mcq", question: "Choose the best option.", text: "Our family loves going to the ______ every summer. There are many amazing water slides and a lazy river.", options: ["A. fun fair", "B. sports center", "C. water park", "D. park"], answer: 2, explain: "Cầu trượt nước (water slides) -> Water park." },
+        { section: "II. VOCABULARY - A", type: "mcq", question: "Choose the best option.", text: "'Why did you buy eggs and flour?' - 'I ______ a cake for my mum.'", options: ["A. am baking", "B. will have", "C. am cooking", "D. make"], answer: 0, explain: "Kế hoạch đã định trước (mua nguyên liệu rồi) -> Hiện tại tiếp diễn hoặc Be going to." },
+        { section: "II. VOCABULARY - A", type: "mcq", question: "Choose the best option.", text: "There's a park ______ my house. But my dad has to take us there because crossing the road is dangerous.", options: ["A. in front", "B. next to", "C. opposite", "D. behind of"], answer: 2, explain: "Phải băng qua đường (crossing the road) -> đối diện (opposite)." },
+        { section: "II. VOCABULARY - A", type: "mcq", question: "Choose the best option.", text: "You should ______ regular exercise, go swimming and lead an active life.", options: ["A. take", "B. have", "C. do", "D. play"], answer: 0, explain: "Collocation: take exercise / do exercise. Trong đề cương thường dùng 'take regular exercise'." },
+        { section: "II. VOCABULARY - A", type: "mcq", question: "Choose the best option.", text: "Fruit and vegetables are good for you because they provide ______ vitamins.", options: ["A. lots of", "B. much", "C. few", "D. a little"], answer: 0, explain: "Vitamins đếm được số nhiều -> lots of." },
+        { section: "II. VOCABULARY - A", type: "mcq", question: "Choose the best option.", text: "I can't eat ______ dairy foods like cheese and butter because they make me sick.", options: ["A. much", "B. a few", "C. some", "D. any"], answer: 3, explain: "Câu phủ định (can't eat) -> dùng 'any'." },
+        { section: "II. VOCABULARY - A", type: "mcq", question: "Choose the best option.", text: "My grandma has ______ good books about food and cooking.", options: ["A. any", "B. some", "C. a little", "D. much"], answer: 1, explain: "Câu khẳng định, books đếm được -> 'some'." },
+        { section: "II. VOCABULARY - A", type: "mcq", question: "Choose the best option.", text: "Jackson always ______ scrolling through Facebook. That's why he feels tired.", options: ["A. stays up late", "B. gets some sleep", "C. see a doctor", "D. keep warm"], answer: 0, explain: "Thức khuya lướt face -> stays up late." },
+        { section: "II. VOCABULARY - A", type: "mcq", question: "Choose the best option.", text: "You should ______ during winters, or you may catch a cold.", options: ["A. have a cough", "B. do exercises", "C. takes vitamins", "D. keep warm"], answer: 3, explain: "Mùa đông cần giữ ấm -> keep warm." },
+        { section: "II. VOCABULARY - A", type: "mcq", question: "Choose the best option.", text: "Rosie ______ singing. Her dream is to be on stage.", options: ["A. enjoy", "B. loves", "C. hates", "D. doesn't like"], answer: 1, explain: "Rosie (số ít) -> loves. Nghĩa phù hợp với 'dream'." },
+        { section: "II. VOCABULARY - A", type: "mcq", question: "Choose the best option.", text: "The children prefer hip hop, but their parents ______ it at all.", options: ["A. doesn't love", "B. like", "C. don't like", "D. love"], answer: 2, explain: "Parents (số nhiều) -> don't like. 'at all' thường đi với phủ định." },
+        { section: "II. VOCABULARY - A", type: "mcq", question: "Choose the best option.", text: "My sister is a big fan of Blackpink. She has all ______ albums.", options: ["A. them", "B. her", "C. its", "D. their"], answer: 3, explain: "Blackpink (nhóm nhạc - số nhiều/tập thể) -> their albums." },
+        { section: "II. VOCABULARY - A", type: "mcq", question: "Choose the best option.", text: "My favorite band is performing ______ the club near my house ______ April 2nd.", options: ["A. in/on", "B. at/on", "C. on/in", "D. about/at"], answer: 1, explain: "Tại địa điểm (at the club), vào ngày (on April 2nd)." },
+        { section: "II. VOCABULARY - A", type: "mcq", question: "Choose the best option.", text: "Every child has the ______ to get an education.", options: ["A. talent", "B. activity", "C. right", "D. event"], answer: 2, explain: "Quyền được giáo dục -> right." },
+        { section: "II. VOCABULARY - A", type: "mcq", question: "Choose the best option.", text: "Last summer, my class collected bottles for ______.", options: ["A. recycling", "B. raising", "C. cleaning up", "D. reducing"], answer: 0, explain: "Thu gom chai lọ để tái chế -> recycling." },
+        { section: "II. VOCABULARY - A", type: "mcq", question: "Choose the best option.", text: "We ______ old textbooks to help students in mountainous areas.", options: ["A. raised", "B. picked", "C. took", "D. donated"], answer: 3, explain: "Quyên góp sách -> donated." },
+        { section: "II. VOCABULARY - A", type: "mcq", question: "Choose the best option.", text: "A ______ is someone who does work without getting money.", options: ["A. charity", "B. volunteer", "C. organization", "D. community"], answer: 1, explain: "Tình nguyện viên -> volunteer." },
+        { section: "II. VOCABULARY - A", type: "mcq", question: "Choose the best option.", text: "We ______ organize a charity car wash. It's easy and fun.", options: ["A. shouldn't", "B. need", "C. should", "D. would like"], answer: 2, explain: "Lời khuyên/đề xuất -> should." },
+        { section: "II. VOCABULARY - A", type: "mcq", question: "Choose the best option.", text: "She was thirsty, so she bought a ______ of soda.", options: ["A. jar", "B. can", "C. bag", "D. stick"], answer: 1, explain: "Lon soda -> can." },
+        { section: "II. VOCABULARY - A", type: "mcq", question: "Choose the best option.", text: "I gave Chloe a ______ of chocolates.", options: ["A. bottle", "B. bag", "C. parcel", "D. box"], answer: 3, explain: "Hộp socola -> box." },
+        { section: "II. VOCABULARY - A", type: "mcq", question: "Choose the best option.", text: "Steve puts only a ______ of sugar on his coffee.", options: ["A. teaspoon", "B. gram", "C. tablespoon", "D. liter"], answer: 0, explain: "Thìa cà phê đường -> teaspoon." },
+
+        // --- PART II: SIGNS (25-38) ---
+        { section: "II. SIGNS", type: "mcq", question: "What does the sign mean?", image: "Q25.png", options: ["A. You can't eat or drink in the cafeteria on Mondays.", "B. The cafeteria opens every day except Monday.", "C. The cafeteria opens every Monday.", "D. The cafeteria opens next Monday."], answer: 3, explain: "Đóng cửa CHO ĐẾN thứ 2 -> Thứ 2 mới mở lại (Next Monday)." },
+        { section: "II. SIGNS", type: "mcq", question: "Read the prescription.", image: "Q26.png", options: ["A. You should take the medicine after eating, twice a day.", "B. You should drink two tablets after every meal.", "C. You shouldn't take tablets after you finish your meal.", "D. You should take one tablet per day after you eat."], answer: 0, explain: "Twice daily = 2 lần/ngày. After meal = sau ăn." },
+        { section: "II. SIGNS", type: "mcq", question: "Read the notice.", image: "Q27.png", options: ["A. You have to put it in the fridge after you open it.", "B. It is enough to eat in 8 weeks.", "C. You have to keep it cold in 8 weeks.", "D. You need to open the refrigerator in 8 weeks."], answer: 0, explain: "Refrigerate = put in fridge (bỏ tủ lạnh)." },
+        { section: "II. SIGNS", type: "mcq", question: "What does this sign mean?", image: "Q28.png", options: ["A. It's safe to buy a microwave oven.", "B. You need to use the microwave oven safely.", "C. You can heat up this container in the microwave oven.", "D. There is a container for this microwave oven."], answer: 2, explain: "Oven safe = An toàn khi dùng trong lò (có thể hâm nóng)." },
+        { section: "II. SIGNS", type: "mcq", question: "What does this sign on the plane mean?", image: "Q29.jpg", options: ["A. You can't use scissors and knives at the same time.", "B. You can't buy any scissors or knives.", "C. You can't bring any sharp objects on the plane.", "D. You can't use scissors or knives because they are sharp."], answer: 2, explain: "Biển cấm dao kéo -> Cấm mang vật sắc nhọn." },
+        { section: "II. SIGNS", type: "mcq", question: "What does this sign mean?", image: "Q30.jpg", options: ["A. You have to drive slower at night than during the day.", "B. You can't drive faster than 70 miles per hour at night.", "C. You have to go at 65 kilometers per hour at night.", "D. The fastest speed you can drive is 65 miles per hour."], answer: 0, explain: "Ban ngày 70, ban đêm 65 -> Đêm phải đi chậm hơn." },
+        { section: "II. SIGNS", type: "mcq", question: "What does this sign mean?", image: "Q31.png", options: ["A. Pedestrian is not allowed.", "B. Be careful of the pedestrian.", "C. People are crossing the street.", "D. There are children or schools ahead."], answer: 2, explain: "Biển người đi bộ qua đường." },
+        { section: "II. SIGNS", type: "mcq", question: "What does this sign mean?", image: "Q32.png", options: ["A. You can only go straight or turn left.", "B. You can only turn right.", "C. You must change your direction.", "D. You can't turn left and go straight."], answer: 1, explain: "Mũi tên rẽ phải bắt buộc -> Only turn right." },
+        { section: "II. SIGNS", type: "mcq", question: "What does this sign mean?", image: "Q33.png", options: ["A. There's no parking lot here.", "B. Parking is not free here.", "C. Vehicle can park here.", "D. Vehicle can't park here."], answer: 3, explain: "Biển cấm đỗ xe." },
+        { section: "II. SIGNS", type: "mcq", question: "What does this sign mean?", image: "Q34.png", options: ["A. There is a hospital ahead.", "B. There is an intersection ahead.", "C. There is a cross street ahead.", "D. There is danger ahead."], answer: 1, explain: "Biển báo giao nhau (ngã tư)." },
+        { section: "II. SIGNS", type: "mcq", question: "What does this sign mean?", image: "Q35.jpg", options: ["A. You can only walk here.", "B. You can't park here.", "C. You can't go from here.", "D. You can go from here."], answer: 3, explain: "Thường biển này là 'Được phép đi thẳng' hoặc chỉ hướng đi. Đáp án D hợp lý nhất trong ngữ cảnh." },
+        { section: "II. SIGNS", type: "mcq", question: "What does this sign mean?", image: "Q36.png", options: ["A. You are not allowed to turn.", "B. You can turn right.", "C. You can't turn left and go straight.", "D. You are not allowed to turn right"], answer: 3, explain: "Cấm rẽ phải." },
+        { section: "II. SIGNS", type: "mcq", question: "What does this sign mean?", image: "Q37.png", options: ["A. There is danger ahead.", "B. There are traffic lights ahead.", "C. There is an intersection ahead.", "D. Traffic lights are about to turn red."], answer: 1, explain: "Biển báo đèn giao thông." },
+        { section: "II. SIGNS", type: "mcq", question: "What does this sign mean?", image: "Q38.jpg", options: ["A. You can't park your bicycle here.", "B. You can cycle here.", "C. You can't cycle here.", "D. You can park your bicycle here."], answer: 2, explain: "Biển cấm xe đạp." },
+
+        // --- PART II: UNIT REVIEW ---
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 1: Army is at home. Her parents ______ at work.", options: ["A. is", "B. are", "C. was", "D. were"], answer: 1, explain: "Parents số nhiều, hiện tại -> are." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 2: My aunt often ______ yoga with her friends.", options: ["A. goes", "B. plays", "C. does", "D. do"], answer: 2, explain: "Do yoga (Aunt số ít -> does)." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 2: I ______ do my biology homework, it's too difficult.", options: ["A. am", "B. can't", "C. should", "D. can"], answer: 1, explain: "Too difficult -> can't (không thể làm)." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 2: John is a ______. He's in his car all day.", options: ["A. student", "B. taxi driver", "C. teacher", "D. nurse"], answer: 1, explain: "Ở trong xe cả ngày -> Taxi driver." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 3: There aren't ______ notebooks on the table.", options: ["A. a", "B. much", "C. some", "D. any"], answer: 3, explain: "Phủ định số nhiều -> any." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 3: The dog is hiding ______ the table because it is afraid.", options: ["A. on", "B. in", "C. under", "D. between"], answer: 2, explain: "Trốn (hiding) -> thường là dưới gầm bàn (under)." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 4: How ______ flour do you want to use?", options: ["A. much", "B. many", "C. often", "D. long"], answer: 0, explain: "Flour (bột) không đếm được -> How much." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 4: You ______ eat too much fast food. It isn't good.", options: ["A. should", "B. shouldn't", "C. see a doctor", "D. could"], answer: 1, explain: "Not good -> Shouldn't eat." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 5: Mary is my sister. She ______ straight black hair.", options: ["A. be", "B. is", "C. have", "D. has"], answer: 3, explain: "She has (có tóc...)." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 5: Megan always ______ nice clothes.", options: ["A. wears", "B. wore", "C. is wearing", "D. was wearing"], answer: 0, explain: "Always -> Hiện tại đơn." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 6: I'm planning to ______ sight-seeing in Paris.", options: ["A. go", "B. visit", "C. do", "D. play"], answer: 0, explain: "Go sightseeing." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 6: He could swim when he ______ five.", options: ["A. is", "B. be", "C. was", "D. were"], answer: 2, explain: "Quá khứ (could) -> was five." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 6: Peter ______ a message last night.", options: ["A. sends", "B. sent", "C. has sent", "D. is sending"], answer: 1, explain: "Last night -> Sent (quá khứ đơn)." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 6: He wears ______ to protect his eyes on sunny days.", options: ["A. passport", "B. sunglasses", "C. umbrella", "D. sandals"], answer: 1, explain: "Bảo vệ mắt -> Sunglasses." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 7: My friends agreed ______ for my ticket.", options: ["A. pay", "B. to pay", "C. paying", "D. paid"], answer: 1, explain: "Agree + to V." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 7: She keeps ______ even when no one listens.", options: ["A. talk", "B. talks", "C. talking", "D. to talk"], answer: 2, explain: "Keep + V-ing." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 7: OPPOSITE of 'generous' is:", options: ["A. rude", "B. mean", "C. serious", "D. quiet"], answer: 1, explain: "Generous (hào phóng) >< Mean (keo kiệt)." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 7: He always thinks everything will go wrong, he is ______.", options: ["A. optimistic", "B. pessimistic", "C. confident", "D. patient"], answer: 1, explain: "Luôn nghĩ xấu -> Pessimistic (bi quan)." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 8: Yesterday, when I came, he ______ flowers.", options: ["A. plants", "B. is planting", "C. has planted", "D. was planting"], answer: 3, explain: "Hành động đang xảy ra trong quá khứ -> Was planting." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 8: I always ______ photos to keep memories.", options: ["A. take", "B. read", "C. have", "D. learn"], answer: 0, explain: "Take photos." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 9: People often dress up in ______ clothes.", options: ["A. tradition", "B. traditional", "C. traditionally", "D. traditionalism"], answer: 1, explain: "Tính từ bổ nghĩa cho clothes -> Traditional." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 9: Look at the dark clouds! It ______ rain soon.", options: ["A. go to", "B. be going to", "C. is going to", "D. will"], answer: 2, explain: "Dự đoán có căn cứ -> is going to." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 9: I feel tired. I think I ______ to bed early.", options: ["A. am going to", "B. will go", "C. going", "D. go"], answer: 1, explain: "Quyết định tức thời/Ý kiến cá nhân (I think) -> Will go." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 9: We need ______ time to finish.", options: ["A. a little", "B. a few", "C. many", "D. some"], answer: 0, explain: "Time không đếm được, cần một chút -> a little (hoặc some, nhưng a little nhấn mạnh lượng nhỏ đủ dùng)." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 9: There isn't ______ honey in the jar.", options: ["A. some", "B. many", "C. much", "D. a few"], answer: 2, explain: "Phủ định, Honey không đếm được -> much." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 10: He's not very ______ - he's always late.", options: ["A. outgoing", "B. punctual", "C. romantic", "D. punctual"], answer: 1, explain: "Luôn trễ -> Không đúng giờ (Punctual)." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 10: Mary is short. She is ______ person in her group.", options: ["A. the tallest", "B. shorter", "C. taller", "D. the shortest"], answer: 3, explain: "Short nhất -> the shortest." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 10: Tony 37, Sue 40. Sue is ______ than Tony.", options: ["A. the oldest", "B. older", "C. as old", "D. old"], answer: 1, explain: "So sánh hơn -> older." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 10: CLOSEST to 'reliable':", options: ["A. popular", "B. creative", "C. dependable", "D. helpful"], answer: 2, explain: "Reliable (đáng tin) = Dependable." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 11: Ho Chi Minh is the most modern city I've ever ______.", options: ["A. see", "B. saw", "C. come", "D. came"], answer: 0, explain: "Have ever seen (Hiện tại hoàn thành)." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 11: We ______ in Nha Trang for three days.", options: ["A. stay", "B. stayed", "C. have stayed", "D. will stay"], answer: 1, explain: "Nếu kể lại chuyện cũ -> stayed. Nếu vẫn đang ở -> have stayed. Ngữ cảnh thường là kể lại." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 11: I have not seen her ______ last summer.", options: ["A. when", "B. since", "C. for", "D. while"], answer: 1, explain: "Mốc thời gian -> since." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 11: I can't get online because my ______ isn't working.", options: ["A. browser", "B. hard disk", "C. firewall", "D. modem"], answer: 3, explain: "Không vào mạng được -> Modem hỏng." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 11: We need to install a ______ to keep data safe.", options: ["A. monitor", "B. firewall", "C. virus", "D. spam"], answer: 1, explain: "Bảo vệ dữ liệu -> Firewall." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 11: Mary has known Peter ______ ten years.", options: ["A. when", "B. since", "C. for", "D. while"], answer: 2, explain: "Khoảng thời gian -> for." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 12: She bought a ______ of grapes.", options: ["A. slice", "B. jar", "C. carton", "D. bunch"], answer: 3, explain: "Chùm nho -> bunch." },
+        { section: "II. UNIT REVIEW", type: "mcq", question: "Unit 12: She eats a ______ of soup.", options: ["A. bowl", "B. can", "C. bunch", "D. box"], answer: 0, explain: "Bát súp -> bowl." },
+
+        // --- PART III: READING A (SP/ST) ---
+        { section: "III. READING - A", type: "mcq", question: "Silkworm pupae (SP) vs Stinky tofu (ST): 'People rarely sell it in restaurants.'", passageId: "reading_A", options: ["SP (Silkworm)", "ST (Stinky Tofu)"], answer: 1, explain: "Trong bài: 'People usually buy it at night markets... rather than in restaurants'." },
+        { section: "III. READING - A", type: "mcq", question: "Silkworm pupae (SP) vs Stinky tofu (ST): 'It is served with lemon leaves.'", passageId: "reading_A", options: ["SP (Silkworm)", "ST (Stinky Tofu)"], answer: 0, explain: "Trong bài: 'mix them with lemon leaves'." },
+        { section: "III. READING - A", type: "mcq", question: "Silkworm pupae (SP) vs Stinky tofu (ST): 'Its ingredients include meat and herbs.'", passageId: "reading_A", options: ["SP (Silkworm)", "ST (Stinky Tofu)"], answer: 1, explain: "Trong bài: 'made from... meat and Chinese herbs'." },
+        { section: "III. READING - A", type: "mcq", question: "Silkworm pupae (SP) vs Stinky tofu (ST): 'There is a variety of ways to cook this dish.'", passageId: "reading_A", options: ["SP (Silkworm)", "ST (Stinky Tofu)"], answer: 1, explain: "Trong bài: 'People can cook stinky tofu in different ways'." },
+        { section: "III. READING - A", type: "mcq", question: "Silkworm pupae (SP) vs Stinky tofu (ST): 'It is high in protein.'", passageId: "reading_A", options: ["SP (Silkworm)", "ST (Stinky Tofu)"], answer: 0, explain: "Trong bài: 'It also contains lots of protein'." },
+
+        // --- PART III: READING B (Girl Scouts) ---
+        { section: "III. READING - B", type: "mcq", question: "Girl Scouts: 'There were 18 girls joining the first Girl Scouts group.'", passageId: "reading_B", text: "True or False?", options: ["True", "False", "No Info"], answer: 0, explain: "Bài đọc: 'Girl Scouts... started with 18 members'." },
+        { section: "III. READING - B", type: "mcq", question: "Girl Scouts: 'Girl Scouts members do different community services.'", passageId: "reading_B", text: "True or False?", options: ["True", "False", "No Info"], answer: 0, explain: "Bài đọc liệt kê nhiều việc: soup kitchen, planting trees..." },
+        { section: "III. READING - B", type: "mcq", question: "Girl Scouts: 'To raise money, the girls sell cookies that their mothers make.'", passageId: "reading_B", text: "True or False?", options: ["True", "False", "No Info"], answer: 1, explain: "Sai. Bài đọc: 'girls bake cookies... with their mums volunteering as an advisor'." },
+        { section: "III. READING - B", type: "mcq", question: "Girl Scouts: 'Girl Scouts raised a lot of money by selling cookies.'", passageId: "reading_B", text: "True or False?", options: ["True", "False", "No Info"], answer: 2, explain: "Bài đọc chỉ nói 'famous for raising money', không nói cụ thể 'a lot'." },
+        { section: "III. READING - B", type: "mcq", question: "Girl Scouts: 'After finishing one goal, the girls receive a sash.'", passageId: "reading_B", text: "True or False?", options: ["True", "False", "No Info"], answer: 1, explain: "Sai. Họ nhận 'badges' (huy hiệu) để đeo lên sash." },
+
+        // --- PART III: READING C (Air Travel) ---
+        { section: "III. READING - C", type: "mcq", question: "The more luggage you bring....", passageId: "reading_C", options: ["A. the more expensive the ticket is.", "B. the more it weighs.", "C. the more trouble you can get in.", "D. the less you carry."], answer: 0, explain: "Bài đọc: 'the more luggage you bring, the more expensive the ticket is'." },
+        { section: "III. READING - C", type: "mcq", question: "Why do you need a boarding pass and passport?", passageId: "reading_C", options: ["A. to leave the airport", "B. to get on the airplane", "C. to bring your luggage", "D. to purchase food"], answer: 1, explain: "Bài đọc: 'need them to get on the plane'." },
+        { section: "III. READING - C", type: "mcq", question: "Where do you pick up your suitcases after landing?", passageId: "reading_C", options: ["A. the ticket counter", "B. the lounge", "C. the security office", "D. the baggage claim"], answer: 3, explain: "Bài đọc: 'find the baggage claim... to pick up my suitcases'." },
+        { section: "III. READING - C", type: "mcq", question: "Why is it important to know how to travel on an airplane?", passageId: "reading_C", options: ["A. The ticket is expensive.", "B. It makes the experience better.", "C. Taking an airplane is faster.", "D. Bringing extra luggage costs more."], answer: 1, explain: "Bài đọc: 'made the experience better'." },
+        { section: "III. READING - C", type: "mcq", question: "What is true about the story?", passageId: "reading_C", options: ["A. It's important to use the seatbelt.", "B. There are many places to eat.", "C. There are many things to know about flying.", "D. You can get lost."], answer: 2, explain: "Context toàn bài là những điều cần biết khi bay." },
+
+        // --- PART III: READING D (Finding Balance) ---
+        { section: "III. READING - D", type: "mcq", question: "Emma often felt tired before she started doing sports.", passageId: "reading_D", text: "True, False, or Not Given?", options: ["True", "False", "Not Given"], answer: 0, explain: "Bài đọc: 'she needed to exercise more because she often felt tired'." },
+        { section: "III. READING - D", type: "mcq", question: "Her doctor recommended swimming as a good way to get fit.", passageId: "reading_D", text: "True, False, or Not Given?", options: ["True", "False", "Not Given"], answer: 1, explain: "False. 'a friend invited her to try swimming', not the doctor." },
+        { section: "III. READING - D", type: "mcq", question: "Emma's opinion about sports changed after she went swimming.", passageId: "reading_D", text: "True, False, or Not Given?", options: ["True", "False", "Not Given"], answer: 0, explain: "True. 'that completely changed her opinion'." },
+        { section: "III. READING - D", type: "mcq", question: "She hikes in the mountains every weekend.", passageId: "reading_D", text: "True, False, or Not Given?", options: ["True", "False", "Not Given"], answer: 1, explain: "False. Bài đọc nói 'sometimes joins a group' và 'nearby hills', không phải every weekend." },
+        { section: "III. READING - D", type: "mcq", question: "Emma plans to join a professional swimming competition next year.", passageId: "reading_D", text: "True, False, or Not Given?", options: ["True", "False", "Not Given"], answer: 2, explain: "Not Given. Không có thông tin này trong bài." },
+
+        // --- PART III: READING E (Mother's/Father's Day) ---
+        { section: "III. READING - E", type: "essay", question: "What kinds of gifts does the mother often get from her family members?", passageId: "reading_E", keywords: ["greeting cards", "gifts", "husband", "children"], answer: "She usually receives greeting cards and gifts from her husband and children.", explain: "Trong bài: 'mother usually receives greeting cards and gifts from her husband and children'." },
+        { section: "III. READING - E", type: "essay", question: "What kinds of gift does she love most?", passageId: "reading_E", keywords: ["day of leisure", "leisure"], answer: "The best gift of all for an American Mom is a day of leisure.", explain: "Trong bài: 'The best gift of all... is a day of leisure'." },
+        { section: "III. READING - E", type: "essay", question: "Why are mother's working days often very hard?", passageId: "reading_E", keywords: ["outside jobs", "housework"], answer: "Because they have outside jobs as well as housework.", explain: "Trong bài: 'have outside jobs as well as housework'." },
+        { section: "III. READING - E", type: "essay", question: "When do American people celebrate Father's Day?", passageId: "reading_E", keywords: ["third sunday", "june"], answer: "On the third Sunday in June.", explain: "Trong bài: 'on the third Sunday in June'." },
+        { section: "III. READING - E", type: "essay", question: "Where do the family members have their dinner party on this occasion?", passageId: "reading_E", keywords: ["restaurant", "home"], answer: "Either in a restaurant or in one of their homes.", explain: "Trong bài: 'either in a restaurant or in one of their homes'." },
+
+        // --- PART VI: WRITING (UPDATED FULL) ---
+        // A. Rewrite sentences
+        { section: "VI. WRITING - A (Rewrite)", type: "essay", question: "Rewrite: 'Let's have a craft fair to raise money for children with special needs.'", text: "-> How...", keywords: ["how about having", "craft fair"], answer: "How about having a craft fair to raise money for children with special needs?", explain: "Cấu trúc gợi ý: Let's + V -> How about + V-ing?" },
+        { section: "VI. WRITING - A (Rewrite)", type: "essay", question: "Rewrite: 'We shouldn't have the concert outdoors because it might be cold in the evening.'", text: "-> Let's...", keywords: ["let's not have", "concert outdoors"], answer: "Let's not have the concert outdoors because it might be cold in the evening.", explain: "Lời khuyên: Shouldn't -> Let's not." },
+        { section: "VI. WRITING - A (Rewrite)", type: "essay", question: "Rewrite: 'Why don't we take part in the fun run next Sunday?'", text: "-> How...", keywords: ["how about taking part", "fun run"], answer: "How about taking part in the fun run next Sunday?", explain: "Cấu trúc gợi ý: Why don't we -> How about + V-ing?" },
+        { section: "VI. WRITING - A (Rewrite)", type: "essay", question: "Rewrite: 'It's a good idea to host a school-wide yard sale on the weekend.'", text: "-> We should...", keywords: ["we should host", "yard sale"], answer: "We should host a school-wide yard sale on the weekend.", explain: "Lời khuyên: It's a good idea -> Should." },
+
+        // B. Make complete sentences
+        { section: "VI. WRITING - B (Sentence Building)", type: "essay", question: "Make sentence: 'Last month, my school/ organize/ a fun run/ raise money/ the local soup kitchen.'", text: "Write the full sentence.", keywords: ["organized", "fun run", "to raise money", "soup kitchen"], answer: "Last month, my school organized a fun run to raise money for the local soup kitchen.", explain: "Thì quá khứ đơn (Last month -> organized), chỉ mục đích (to raise money)." },
+        { section: "VI. WRITING - B (Sentence Building)", type: "essay", question: "Make sentence: 'My brother/ work/ a volunteer/ Kenya/ last year.'", text: "Write the full sentence.", keywords: ["worked", "as a volunteer", "kenya"], answer: "My brother worked as a volunteer in Kenya last year.", explain: "Thì quá khứ đơn (last year -> worked)." },
+        { section: "VI. WRITING - B (Sentence Building)", type: "essay", question: "Make sentence: 'I/ go/ a clean-up/ last week/ the forest.'", text: "Write the full sentence.", keywords: ["went", "clean-up", "forest"], answer: "I went to a clean-up last week in the forest.", explain: "Thì quá khứ đơn (last week -> went)." },
+        { section: "VI. WRITING - B (Sentence Building)", type: "essay", question: "Make sentence: 'you/donate/money/help/ flood victims/ yesterday?'", text: "Write the full sentence.", keywords: ["did you donate", "flood victims", "yesterday"], answer: "Did you donate money to help flood victims yesterday?", explain: "Câu hỏi thì quá khứ đơn (Did + S + V)." },
+
+        // C. Reorder words
+        { section: "VI. WRITING - C (Reorder)", type: "essay", question: "Reorder: 'I/travelling/think/by/plane / is / much/more/by/than/ expensive / train.'", text: "Arrange words.", keywords: ["travelling by plane", "more expensive", "than"], answer: "I think travelling by plane is much more expensive than by train.", explain: "So sánh hơn: more expensive than." },
+        { section: "VI. WRITING - C (Reorder)", type: "essay", question: "Reorder: 'me, / is / more / To/health/important / money / than.'", text: "Arrange words.", keywords: ["health is", "more important", "than money"], answer: "To me, health is more important than money.", explain: "So sánh hơn: more important than." },
+        { section: "VI. WRITING - C (Reorder)", type: "essay", question: "Reorder: 'in/the/is/Life/more/countryside/peaceful/ the/that/in/than/city.'", text: "Arrange words.", keywords: ["life in the countryside", "more peaceful", "than"], answer: "Life in the countryside is more peaceful than that in the city.", explain: "So sánh hơn: more peaceful than." },
+        { section: "VI. WRITING - C (Reorder)", type: "essay", question: "Reorder: 'service / healthcare / The/in/ the/than/is/ the/better/city/that/in/countryside.'", text: "Arrange words.", keywords: ["healthcare service", "better", "than"], answer: "The healthcare service in the city is better than that in the countryside.", explain: "So sánh hơn: better than." },
+        { section: "VI. WRITING - C (Reorder)", type: "essay", question: "Reorder: 'air/areas/The/is/ in /fresher / urban/rural/than/in/the/that/one.'", text: "Arrange words.", keywords: ["air in rural areas", "fresher", "than"], answer: "The air in rural areas is fresher than that in the urban one.", explain: "So sánh hơn tính từ ngắn: fresher than." },
+        { section: "VI. WRITING - C (Reorder)", type: "essay", question: "Reorder: 'looks/David/than/stronger / John.'", text: "Arrange words.", keywords: ["david looks", "stronger than", "john"], answer: "David looks stronger than John.", explain: "So sánh hơn: stronger than." },
+        { section: "VI. WRITING - C (Reorder)", type: "essay", question: "Reorder: 'I/at/than/better/my/English/ am / sister.'", text: "Arrange words.", keywords: ["better at english", "than my sister"], answer: "I am better at English than my sister.", explain: "So sánh hơn: better than." },
+        { section: "VI. WRITING - C (Reorder)", type: "essay", question: "Reorder: 'in/city/Roads / the / often / are /in/crowded/more/those / the/than/small / town.'", text: "Arrange words.", keywords: ["roads in the city", "more crowded", "than those"], answer: "Roads in the city are often more crowded than those in the small town.", explain: "So sánh hơn: more crowded than." },
+        { section: "VI. WRITING - C (Reorder)", type: "essay", question: "Reorder: 'Is/tastier/cake/this/that/than/ one?'", text: "Arrange words.", keywords: ["is this cake", "tastier than", "that one"], answer: "Is this cake tastier than that one?", explain: "So sánh hơn câu hỏi: tastier than." },
+        { section: "VI. WRITING - C (Reorder)", type: "essay", question: "Reorder: 'and/Fruits / vegetables / are/fast/than / healthier / food.'", text: "Arrange words.", keywords: ["fruits and vegetables", "healthier than", "fast food"], answer: "Fruits and vegetables are healthier than fast food.", explain: "So sánh hơn: healthier than." },
+        { section: "VI. WRITING - C (Reorder)", type: "essay", question: "Reorder: 'chess / ever/hardly / plays / Sheila /.'", text: "Arrange words.", keywords: ["sheila hardly ever plays chess"], answer: "Sheila hardly ever plays chess.", explain: "Trạng từ tần suất: hardly ever plays." },
+        { section: "VI. WRITING - C (Reorder)", type: "essay", question: "Reorder: 'milk / you / drink/do/much/ want to / how/?'", text: "Arrange words.", keywords: ["how much milk", "do you want"], answer: "How much milk do you want to drink?", explain: "Câu hỏi lượng từ: How much." },
+        { section: "VI. WRITING - C (Reorder)", type: "essay", question: "Reorder: 'could/five/he/when/write/was/he/.'", text: "Arrange words.", keywords: ["could write", "when he was five"], answer: "He could write when he was five.", explain: "Khả năng trong quá khứ: could." },
+        { section: "VI. WRITING - C (Reorder)", type: "essay", question: "Reorder: 'there/table/ is / on / a book / the /.'", text: "Arrange words.", keywords: ["there is a book", "on the table"], answer: "There is a book on the table.", explain: "Cấu trúc There is." },
+
+        // D. Rewrite using Comparative Structure
+        { section: "VI. WRITING - D (Comparatives)", type: "essay", question: "Rewrite: 'Her old house is bigger than her new house.'", text: "-> Her new house...", keywords: ["is smaller than", "her old house"], answer: "Her new house is smaller than her old house.", explain: "Ngược lại của bigger là smaller." },
+        { section: "VI. WRITING - D (Comparatives)", type: "essay", question: "Rewrite: 'I have never read a better novel than this.'", text: "-> This is...", keywords: ["is the best novel", "have ever read"], answer: "This is the best novel I have ever read.", explain: "Chuyển từ so sánh hơn (never... better) sang so sánh nhất (the best)." },
+        { section: "VI. WRITING - D (Comparatives)", type: "essay", question: "Rewrite: 'Mount Everest is the highest mountain in the world.'", text: "-> No mountain in the world...", keywords: ["is higher than", "mount everest"], answer: "No mountain in the world is higher than Mount Everest.", explain: "Chuyển từ so sánh nhất sang so sánh hơn với No..." },
+        { section: "VI. WRITING - D (Comparatives)", type: "essay", question: "Rewrite: 'She and her friend are equally tall.'", text: "-> She...", keywords: ["is as tall as", "her friend"], answer: "She is as tall as her friend.", explain: "Equally tall -> as tall as (so sánh bằng)." },
+        { section: "VI. WRITING - D (Comparatives)", type: "essay", question: "Rewrite: 'No river in the world is longer than the Nile.'", text: "-> The Nile...", keywords: ["is the longest river", "in the world"], answer: "The Nile is the longest river in the world.", explain: "Chuyển từ so sánh hơn (No... longer) sang so sánh nhất (the longest)." },
+        { section: "VI. WRITING - D (Comparatives)", type: "essay", question: "Rewrite: 'No student in my class is taller than Nam.'", text: "-> Nam...", keywords: ["is the tallest student", "in my class"], answer: "Nam is the tallest student in my class.", explain: "Chuyển từ so sánh hơn (No... taller) sang so sánh nhất (the tallest)." },
+
+        // --- EXERCISE 1 (VERBS) - SAMPLE ---
+        { section: "VERB TENSES", type: "essay", question: "Last night we (watch) ______ TV when the power (fail) ______.", text: "Put verbs in correct form.", keywords: ["were watching", "failed"], answer: "were watching / failed", explain: "Hành động đang xảy ra (watch -> were watching) thì hành động khác xen vào (fail -> failed)." },
+        { section: "VERB TENSES", type: "essay", question: "London (change) ______ a lot since we first (come) ______.", text: "Put verbs in correct form.", keywords: ["has changed", "came"], answer: "has changed / came", explain: "Sau since là QKĐ, trước since là HTHT." }
+    ];
+
+    // --- STATE VARIABLES ---
+    let quizData = [];
+    let userAnswers = {}; // { questionId: {status, selected/input} }
+    let currentTab = 'pronunciation'; // Default tab
+    let speechSynth = window.speechSynthesis; // Global ref
+
+    // --- TAB MAPPING ---
+    const tabMapping = {
+        'pronunciation': ['I. PRONUNCIATION'],
+        'vocab': ['II. VOCABULARY', 'II. SIGNS', 'II. UNIT REVIEW', 'VERB TENSES'],
+        'reading': ['III. READING'],
+        'writing': ['VI. WRITING']
+    };
+
+    // --- INIT ---
+    function init() {
+        // Assign Unique IDs to all questions
+        rawData.forEach((q, index) => {
+            q.id = index; // Unique ID based on original index
+        });
+        
+        switchTab('pronunciation');
+        updateAllTabsProgress();
+    }
+
+    // --- SWITCH TAB ---
+    function switchTab(tabId) {
+        currentTab = tabId;
+        
+        // Filter Data
+        const keywords = tabMapping[tabId];
+        quizData = rawData.filter(q => keywords.some(k => q.section.includes(k)));
+
+        // Update UI Tabs
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.id === `tab-${tabId}`) {
+                btn.classList.add('active');
+            }
+        });
+        
+        // Update Title
+        const tabNames = {
+            'pronunciation': 'Pronunciation',
+            'vocab': 'Vocab & Grammar',
+            'reading': 'Reading',
+            'writing': 'Writing'
+        };
+        document.getElementById('current-tab-name').innerText = tabNames[tabId];
+
+        // Reset View
+        document.getElementById('quiz-view').style.display = 'block';
+        document.getElementById('result-view').style.display = 'none';
+        
+        // Count answered in this tab
+        updateScore();
+        
+        renderAllQuestions();
+        window.scrollTo({top: 0, behavior: 'smooth'}); // Scroll to top on switch
+    }
+
+    // --- RENDER ALL ---
+    function renderAllQuestions() {
+        const container = document.getElementById('question-list');
+        
+        if (quizData.length === 0) {
+            container.innerHTML = '<p style="text-align:center; padding:20px;">Chưa có câu hỏi cho phần này.</p>';
+            return;
+        }
+
+        let html = '';
+        let lastPassageId = null;
+
+        quizData.forEach((q, index) => {
+            // Check if passage needs to be rendered
+            if (q.passageId && q.passageId !== lastPassageId && passageContent[q.passageId]) {
+                html += `<div class="reading-passage">${passageContent[q.passageId]}</div>`;
+                lastPassageId = q.passageId;
+            }
+            html += getQuestionHTML(q, index); // index here is local index in filtered array
+        });
+        container.innerHTML = html;
+        document.getElementById('total-q').innerText = quizData.length;
+    }
+
+    // Helper to generate HTML for a SINGLE question
+    function getQuestionHTML(q, index) {
+        const savedState = userAnswers[q.id]; // Use Unique ID
+        
+        let html = `<div class="question-card" id="q-card-${q.id}">`;
+        
+        // Header
+        html += `
+            <div class="section-badge">${q.section}</div>
+            <div class="question-text">
+                <strong>Q${index + 1}:</strong> ${q.question}
+                ${q.section.includes("PRONUNCIATION") ? `<span class="tts-icon" onclick="speakText('${q.options.join(' ')}')">🔊</span>` : ''}
+            </div>
+        `;
+
+        // Image
+        if (q.image) {
+            html += `<div class="img-display"><img src="${q.image}" alt="Question Image"></div>`;
+        }
+
+        // Context Text
+        if (q.text) {
+             const looksLikeOptions = q.text.match(/^A\..*B\./);
+            if (!looksLikeOptions || q.section.includes("PRONUNCIATION")) {
+                let displayText = q.text;
+                if (q.section.includes("PRONUNCIATION")) {
+                     displayText = q.text.replace(/([A-D]\.\s)(\w+)/g, 
+                        "$1<span style='cursor:pointer; color:var(--primary); font-weight:bold' onclick=\"speakText('$2')\">$2 🔊</span>");
+                }
+                html += `<div class="context-box">${displayText}</div>`;
+            }
+        }
+
+        // --- OPTIONS (MCQ) ---
+        if (q.type === 'mcq') {
+            html += `<div class="options-grid">`;
+            let indices = q.options.map((_, i) => i);
+
+            indices.forEach(optIdx => {
+                let className = 'option-btn';
+                if (savedState) {
+                    className += ' disabled';
+                    if (optIdx === q.answer) className += ' correct';
+                    if (savedState.selected === optIdx && optIdx !== q.answer) className += ' wrong';
+                    if (savedState.selected === optIdx) className += ' selected';
+                }
+                
+                // Pass q.id instead of local index
+                html += `<button class="${className}" onclick="handleMCQ(${q.id}, ${optIdx})">${q.options[optIdx]}</button>`;
+            });
+            html += `</div>`;
+        } 
+        
+        // --- ESSAY ---
+        else if (q.type === 'essay') {
+            let val = savedState ? savedState.input : '';
+            let disabled = savedState ? 'disabled' : '';
+            
+            html += `
+                <div class="essay-area">
+                    <input type="text" class="essay-input" id="essay-in-${q.id}" value="${val.replace(/"/g, '&quot;')}" ${disabled} placeholder="Nhập câu trả lời..." autocomplete="off">
+                    ${!savedState ? `<button class="btn btn-primary" onclick="handleEssay(${q.id})">Kiểm tra</button>` : ''}
+                </div>
+            `;
+        }
+
+        // --- FEEDBACK ---
+        if (savedState) {
+            html += `
+                <div class="feedback show">
+                    <h4>${savedState.status === 'correct' ? '✅ Chính xác!' : '❌ Chưa đúng!'}</h4>
+                    <p>${q.explain || ''}</p>
+                    ${q.tip ? `<p><em>Mẹo: ${q.tip}</em></p>` : ''}
+                    ${q.type === 'essay' ? `<p><strong>Đáp án gợi ý:</strong> ${q.answer}</p>` : ''}
+                </div>
+            `;
+        }
+
+        html += `</div>`; // Close card
+        return html;
+    }
+
+    // --- HANDLE ACTIONS ---
+    function handleMCQ(qId, optIndex) {
+        const q = rawData[qId]; // Access directly via global ID
+        const isCorrect = optIndex === q.answer;
+        
+        userAnswers[qId] = {
+            type: 'mcq',
+            selected: optIndex,
+            status: isCorrect ? 'correct' : 'wrong'
+        };
+
+        // Re-render ONLY this card
+        const card = document.getElementById(`q-card-${qId}`);
+        if (card) {
+            const localIndex = quizData.findIndex(item => item.id === qId);
+            card.outerHTML = getQuestionHTML(q, localIndex);
+        }
+        updateScore();
+        updateAllTabsProgress();
+    }
+
+    function handleEssay(qId) {
+        const q = rawData[qId];
+        const inputEl = document.getElementById(`essay-in-${qId}`);
+        // Clean input: trim spaces, replace multiple spaces with single space
+        const inputVal = inputEl.value.trim().replace(/\s+/g, ' ');
+        
+        if (!inputVal) return;
+
+        // Check if ALL keywords are present
+        const missing = q.keywords.filter(kw => !inputVal.toLowerCase().includes(kw.toLowerCase()));
+        const isCorrect = missing.length === 0;
+
+        userAnswers[qId] = {
+            type: 'essay',
+            input: inputVal,
+            status: isCorrect ? 'correct' : 'wrong'
+        };
+
+        const card = document.getElementById(`q-card-${qId}`);
+        if (card) {
+            const localIndex = quizData.findIndex(item => item.id === qId);
+            card.outerHTML = getQuestionHTML(q, localIndex);
+        }
+        updateScore();
+        updateAllTabsProgress();
+    }
+
+    function updateScore() {
+        // Count answers ONLY for current tab
+        let currentTabCorrect = 0;
+        let currentTabTotal = quizData.length;
+        
+        quizData.forEach(q => {
+            if (userAnswers[q.id] && userAnswers[q.id].status === 'correct') {
+                currentTabCorrect++;
+            }
+        });
+
+        document.getElementById('score').innerText = currentTabCorrect;
+        document.getElementById('total-q').innerText = currentTabTotal;
+    }
+
+    function updateAllTabsProgress() {
+        Object.keys(tabMapping).forEach(key => {
+            const keywords = tabMapping[key];
+            // Filter all questions belonging to this tab
+            const tabQuestions = rawData.filter(q => keywords.some(k => q.section.includes(k)));
+            
+            // Count answered
+            const answeredCount = tabQuestions.filter(q => userAnswers[q.id]).length;
+            const total = tabQuestions.length;
+            
+            // Update small tag
+            const label = document.getElementById(`prog-${key}`);
+            if(label) label.innerText = `(${answeredCount}/${total})`;
+        });
+    }
+
+    // --- FINISH & REVIEW ---
+    function finishQuiz() {
+        document.getElementById('quiz-view').style.display = 'none';
+        document.getElementById('result-view').style.display = 'block';
+        window.scrollTo({top: 0, behavior: 'smooth'});
+
+        // Score for current tab
+        let currentTabCorrect = 0;
+        let currentTabTotal = quizData.length;
+        
+        quizData.forEach(q => {
+            if (userAnswers[q.id] && userAnswers[q.id].status === 'correct') {
+                currentTabCorrect++;
+            }
+        });
+        
+        document.getElementById('final-score').innerText = `${currentTabCorrect}/${currentTabTotal}`;
+        
+        let msg = "";
+        const p = currentTabTotal > 0 ? (currentTabCorrect / currentTabTotal) * 100 : 0;
+        if (p >= 90) msg = "Tuyệt vời! Bạn đã nắm chắc kiến thức.";
+        else if (p >= 70) msg = "Khá tốt! Hãy ôn lại các câu sai nhé.";
+        else msg = "Cần cố gắng hơn! Hãy xem lại các câu sai và làm lại.";
+        
+        document.getElementById('feedback-msg').innerText = msg;
+    }
+
+    function restartTab() {
+        if(confirm("Bạn có muốn làm lại phần này từ đầu?")) {
+            // Clear answers ONLY for current tab questions
+            quizData.forEach(q => {
+                delete userAnswers[q.id];
+            });
+            switchTab(currentTab);
+            updateAllTabsProgress();
+        }
+    }
+
+    function reviewMode() {
+        document.getElementById('result-view').style.display = 'none';
+        document.getElementById('quiz-view').style.display = 'block';
+    }
+
+    // --- UTILS ---
+    function speakText(text) {
+        if ('speechSynthesis' in window) {
+            speechSynth.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US'; 
+            utterance.rate = 0.8;
+            speechSynth.speak(utterance);
+        } else {
+            alert('Trình duyệt không hỗ trợ âm thanh.');
+        }
+    }
+
+    // Start
+    init();
+
+</script>
+</body>
+</html>
